@@ -1,7 +1,7 @@
 const updateLyrics = () => {
   const currentLyricsElement = document.querySelector('.SimLRC>.active');
-  const currentLyrics = currentLyricsElement ? currentLyricsElement.firstChild.innerHTML : '';
-  const currentLyricsTranslate = currentLyricsElement && currentLyricsTranslate !== currentLyricsElement.lastChild.innerHTML ? currentLyricsElement.lastChild.innerHTML : '';
+  const currentLyrics = currentLyricsElement ? currentLyricsElement.firstChild.textContent : '';
+  const currentLyricsTranslate = currentLyricsElement && currentLyrics !== currentLyricsElement.lastChild.textContent ? currentLyricsElement.lastChild.textContent : '';
 
   console.log('Lyrics:', currentLyrics);
   console.log('Translation:', currentLyricsTranslate);
@@ -11,7 +11,7 @@ const updateLyrics = () => {
     {
         method: "POST",
         body: JSON.stringify({
-          basic: currentLyrics,
+          lyric: currentLyrics,
           extra: currentLyricsTranslate
         }),
         headers: {
@@ -24,9 +24,20 @@ const updateLyrics = () => {
 
 };
 
-const parentElement = document.querySelector('.SimLRC');
-if (parentElement) {
-  const observer = new MutationObserver(updateLyrics);
-  observer.observe(parentElement, { childList: true, subtree: true });
-  updateLyrics();
-}
+const waitForElement = async (selector) => {
+  while (!document.querySelector(selector)) {
+    await new Promise(resolve => requestAnimationFrame(resolve));
+  }
+  return document.querySelector(selector);
+};
+
+const initObserver = async () => {
+  const parentElement = await waitForElement('.SimLRC');
+  if (parentElement) {
+    const observer = new MutationObserver(updateLyrics);
+    observer.observe(parentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    updateLyrics();
+  }
+};
+
+initObserver();
