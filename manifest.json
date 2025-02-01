@@ -1,8 +1,8 @@
 {
-  "packageId": "RisBugFix",
-  "extName": "补丁-链接#符号支持",
-  "uiName": "补丁-链接#符号支持",
-  "version": "0.0.1",
+  "packageId": "lyricsIsland",
+  "extName": "lyricsIsland",
+  "uiName": "ClassIsland扩展服务端-lyricsIsland",
+  "version": "1.0.0",
   "entries": [
     "function.js"
   ]
